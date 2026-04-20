@@ -47,9 +47,9 @@ function ProgrammaticLaptop() {
       </mesh>
       
       {/* Keyboard structural abstract representation */}
-      <mesh position={[0, 0.08, 0.2]}>
+      <mesh position={[0, 0.08, 0.2]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[3.6, 1.8, 12, 6]} />
-        <meshBasicMaterial color="#E11D2E" wireframe transparent opacity={0.6} rotation={[-Math.PI / 2, 0, 0]} />
+        <meshBasicMaterial color="#E11D2E" wireframe transparent opacity={0.6} />
       </mesh>
       
       {/* Screen/Lid of the laptop */}
@@ -82,8 +82,8 @@ export default function ThreeModel() {
           <Suspense fallback={null}>
             <PresentationControls
               global
-              config={{ mass: 2, tension: 500 }}
-              snap={{ mass: 4, tension: 1500 }}
+              damping={0.2}
+              snap={true}
               rotation={[0.2, 0, 0]}
               polar={[-Math.PI / 3, Math.PI / 3]}
               azimuth={[-Math.PI / 1.4, Math.PI / 2]}
