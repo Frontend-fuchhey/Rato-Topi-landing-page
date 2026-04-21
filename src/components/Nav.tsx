@@ -1,17 +1,13 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import Image from "next/image";
-import { Home, User, Briefcase, Image as ImageIcon, Send, Menu, X } from "lucide-react";
+import { Home, User, Briefcase, Image as ImageIcon, Mail, Menu, X } from "lucide-react";
 
 const navItems = [
-  { name: "Home", href: "#hero", icon: Home },
-  { name: "About", href: "#about", icon: User },
-  { name: "Work", href: "#work", icon: Briefcase },
-  { name: "Gallery", href: "#gallery", icon: ImageIcon },
-  { name: "Contact", href: "#contact", icon: Send },
+  { name: "Home", id: "hero", icon: Home },
+  { name: "About", id: "about", icon: User },
+  { name: "Work", id: "work", icon: Briefcase },
+  { name: "Gallery", id: "gallery", icon: ImageIcon },
+  { name: "Contact", id: "contact", icon: Mail },
 ];
 
 export default function Nav() {
@@ -26,60 +22,65 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+    setMobileMenuOpen(false);
+  };
+
   const NavLink = ({ 
-    href, 
-    text, 
+    id, 
+    text,
     Icon
   }: { 
-    href: string; 
-    text: string; 
-    Icon?: any;
+    id: string; 
+    text: string;
+    Icon: any;
   }) => (
-    <Link 
-      href={href} 
-      className="group flex items-center gap-2 transition-colors text-black hover:text-accent font-heading font-semibold text-[13px] tracking-widest uppercase"
-      onClick={() => setMobileMenuOpen(false)}
+    <a 
+      href={`#${id}`}
+      onClick={(e) => handleNavClick(e, id)}
+      className="flex flex-row items-center gap-1.5 text-[11px] font-bold text-black hover:text-[#e11d2e] transition uppercase tracking-widest"
     >
-      {Icon && (
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          className="text-accent"
-        >
-          <Icon size={18} strokeWidth={2} />
-        </motion.div>
-      )}
-      <span className="relative z-10 transition-colors duration-300">
-        {text}
-      </span>
-    </Link>
+      <Icon size={12} />
+      <span>{text}</span>
+    </a>
   );
 
   return (
     <>
-      <motion.nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-12 transition-all duration-300 ${
-          scrolled ? "h-[70px] bg-white/90 backdrop-blur-md border-b border-[#F0F0F0]" : "h-[90px] bg-transparent"
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-12 lg:px-20 py-3 transition-all duration-300 ${
+          scrolled ? "bg-white/90 backdrop-blur-sm border-b border-divider shadow-sm" : "bg-white/80 backdrop-blur-sm"
         }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
         {/* Logo */}
-        <Link href="#hero" className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="Rato Topi Logo"
-            width={160}
-            height={50}
-            priority
-            className="h-10 w-auto object-contain"
-          />
-        </Link>
+        <div className="flex items-center">
+          <a href="#hero" onClick={(e) => handleNavClick(e, 'hero')}>
+            <img
+              src="/logo.png"
+              alt="Rato Topi Logo"
+              className="h-6 w-auto object-contain"
+            />
+          </a>
+        </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex gap-8 items-center">
           {navItems.map((item) => (
-            <NavLink key={item.name} href={item.href} text={item.name} Icon={item.icon} />
+            <NavLink key={item.id} id={item.id} text={item.name} Icon={item.icon} />
           ))}
         </div>
 
@@ -88,15 +89,14 @@ export default function Nav() {
           className="md:hidden text-black p-2"
           onClick={() => setMobileMenuOpen(true)}
         >
-          <Menu size={28} />
+          <Menu size={24} />
         </button>
-      </motion.nav>
+      </nav>
 
       {/* Mobile Menu Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            {/* Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -104,31 +104,24 @@ export default function Nav() {
               onClick={() => setMobileMenuOpen(false)}
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
             />
-            {/* Sidebar */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-[280px] bg-white z-[70] shadow-2xl p-10 flex flex-col gap-8"
+              className="fixed top-0 right-0 h-full w-[240px] bg-white z-[70] shadow-2xl p-8 flex flex-col gap-6"
             >
-              <div className="flex justify-between items-center mb-4">
-                <span className="font-heading font-bold text-accent tracking-tighter text-xl">MENU</span>
+              <div className="flex justify-between items-center">
+                <span className="font-heading font-bold text-accent tracking-tighter text-lg">MENU</span>
                 <button onClick={() => setMobileMenuOpen(false)} className="text-black">
-                  <X size={30} />
+                  <X size={24} />
                 </button>
               </div>
               
-              <div className="flex flex-col gap-8 items-start">
+              <div className="flex flex-col gap-6 items-start">
                 {navItems.map((item) => (
-                  <NavLink key={item.name} href={item.href} text={item.name} Icon={item.icon} />
+                  <NavLink key={item.id} id={item.id} text={item.name} Icon={item.icon} />
                 ))}
-              </div>
-
-              <div className="mt-auto pt-10 border-t border-[#F0F0F0]">
-                <p className="text-[10px] text-gray-400 tracking-[0.2em] font-bold uppercase">
-                  © 2024 RATO TOPI
-                </p>
               </div>
             </motion.div>
           </>

@@ -1,8 +1,5 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Transition } from "framer-motion";
-import Image from "next/image";
 
 const teamData = [
   {
@@ -42,24 +39,26 @@ const teamData = [
   },
 ];
 
-export default function Hero() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [displayIndex, setDisplayIndex] = useState(0);
+interface HeroProps {
+  activeIndex: number;
+  setActiveIndex: (index: number) => void;
+}
+
+export default function Hero({ activeIndex, setActiveIndex }: HeroProps) {
+  const [displayIndex, setDisplayIndex] = useState(activeIndex);
   const [isMounted, setIsMounted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-    // Picks a random member on page load
-    const randomIdx = Math.floor(Math.random() * teamData.length);
-    setActiveIndex(randomIdx);
-    setDisplayIndex(randomIdx);
-  }, []);
+    if (activeIndex !== displayIndex) {
+      setIsAnimating(true);
+    }
+  }, [activeIndex]);
 
   const handlePortraitClick = (index: number) => {
     if (index === activeIndex) return;
     setActiveIndex(index);
-    setIsAnimating(true);
   };
 
   const customEase: [number, number, number, number] = [0.4, 0, 0.2, 1];
@@ -69,166 +68,137 @@ export default function Hero() {
     y: { duration: 0.7, ease: customEase },
   };
 
-  const slotSize = 180;
-  const inactiveScale = 0.85;
-
-  if (!isMounted) return <div className="min-h-screen bg-white" />;
+  if (!isMounted) return <div className="h-screen bg-white" />;
 
   return (
     <motion.section
       id="hero"
-      className="relative w-full min-h-screen pt-[70px] pb-32 overflow-hidden bg-white flex flex-col"
+      className="relative h-screen max-h-screen overflow-hidden flex flex-col justify-between py-4 px-12 lg:px-20 bg-white"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1.2, ease: "easeOut" }}
-      style={{
-        backgroundImage: "radial-gradient(#e5e7eb 1px, transparent 1px)",
-        backgroundSize: "20px 20px",
-        backgroundPosition: "center",
-      }}
+      transition={{ duration: 1 }}
     >
-      <div className="w-full max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-12 flex-1 relative z-20">
+      {/* Background Glow */}
+      <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-red-100/20 blur-[100px] rounded-full z-0 translate-x-1/3" />
 
-        {/* Left Col: Headline */}
-        <div className="w-full md:w-[60%] flex flex-col items-start justify-center pr-8">
+      {/* Middle Section: Split Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center flex-grow pt-14 px-4 overflow-hidden">
+
+        {/* Left Side: Typography */}
+        <div className="text-left flex flex-col items-start translate-y-[-10px]">
           <motion.h1
-            className="font-heading font-black text-5xl md:text-6xl lg:text-7xl leading-[1.1] text-black text-left"
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Engineering <span className="glossy-text">डिजिटल</span>
-            <br />
-            Solutions with <span className="text-black relative inline-block">
-              Precision.
-              <div className="absolute left-0 right-0 bottom-[1px] h-[2px] bg-accent z-[-1]" />
-            </span>
-          </motion.h1>
-
-          <motion.button
-            className="bg-black text-white px-6 py-[10px] rounded-[2px] font-heading font-medium tracking-[1px] text-[13px] hover:bg-accent transition-colors duration-300 mt-8 w-fit"
+            className="font-heading font-black text-4xl lg:text-6xl leading-[1.1] text-gray-900 mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8 }}
           >
-            START A PROJECT
-          </motion.button>
+            Engineering
+            <span className="text-accent font-mukta font-size-34">डिजिटल</span><br />
+            Precision<span className="text-accent">.</span>
+          </motion.h1>
+
+          <p className="text-gray-500 font-sans text-xs lg:text-sm max-w-sm mb-6 leading-relaxed">
+            We build fast, scalable and user-centric digital products that solve complex engineering problems for leading businesses and startups.
+          </p>
+
+          <div className="flex flex-row items-center gap-4">
+            <button className="bg-accent text-white px-5 py-2.5 rounded-full font-heading font-bold tracking-[1px] text-[12px] hover:bg-black transition-all duration-300 shadow-lg active:scale-95">
+              START A PROJECT
+            </button>
+            <button className="bg-white text-black border border-gray-200 px-5 py-2.5 rounded-full font-heading font-bold tracking-[1px] text-[12px] hover:border-black transition-all duration-300 active:scale-95">
+              VIEW OUR WORK
+            </button>
+          </div>
         </div>
 
-        {/* Right Col: Info Card */}
-        <div className="w-full md:w-[40%] flex justify-center lg:justify-end items-center">
+        {/* Right Side: Compact Bio Card */}
+        <div className="hidden lg:flex justify-end items-center relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={displayIndex}
-              className="w-full max-w-sm bg-white border border-[#EDEDED] shadow-sm rounded-sm p-8 flex flex-col justify-center min-h-[220px]"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={glideTransition}
+              className="relative bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-gray-50 flex flex-row items-center gap-6 overflow-hidden w-full max-w-sm ml-auto"
+              initial={{ opacity: 0, scale: 0.95, x: 30 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.95, x: -30 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-accent font-mono text-[11px] uppercase tracking-widest font-bold block pb-3"
-              >
-                {teamData[displayIndex].role}
-              </motion.span>
+              {/* Card Left: Info */}
+              <div className="flex-1 flex flex-col items-start z-10">
+                <div className="text-accent font-mono text-[10px] uppercase tracking-[0.35em] font-bold mb-3">
+                  {teamData[displayIndex].role}
+                </div>
+                <h3 className="font-heading font-black text-xl lg:text-2xl text-black mb-4 tracking-tight">
+                  {teamData[displayIndex].name}
+                </h3>
+                <p className="text-gray-400 font-sans text-[13px] leading-relaxed max-w-[150px]">
+                  {teamData[displayIndex].bio}
+                </p>
+              </div>
 
-              <motion.h3
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="font-heading font-black text-4xl text-black mb-4 tracking-tighter"
-              >
-                {teamData[displayIndex].name}
-              </motion.h3>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-[#4A4A4A] font-sans text-sm leading-[1.6]"
-              >
-                {teamData[displayIndex].bio}
-              </motion.p>
+              {/* Card Right: Compact Image */}
+              <div className="relative flex-shrink-0 z-10">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-accent/5 rounded-full z-0" />
+                <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-white shadow-md">
+                  <img
+                    src={teamData[displayIndex].image}
+                    alt={teamData[displayIndex].name}
+                    className="w-full h-full object-cover grayscale"
+                  />
+                </div>
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
 
-      {/* Team Dock: Fixed Geometric Grid */}
-      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-full flex items-center justify-center z-40">
-        <div className="flex items-end justify-center gap-6">
+      {/* Bottom Section: Thumbnails */}
+      <div className="w-full mt-auto pb-6 z-40 flex flex-col items-center">
+        <div className="flex items-end justify-center gap-4 md:gap-8">
           {teamData.map((member, index) => {
             const isActive = index === activeIndex;
 
             return (
               <div
                 key={member.id}
-                className="relative flex items-center justify-center"
-                style={{ width: slotSize, height: slotSize }}
+                className="relative cursor-pointer group"
+                onClick={() => handlePortraitClick(index)}
               >
-                {/* Rato Hat: Perched on TOP-RIGHT Corner */}
+                {/* Slanted Hat Sitting on Corner */}
                 {isActive && (
                   <motion.div
-                    layoutId="brand-hat"
-                    className="absolute -top-[15px] -right-[15px] z-50 pointer-events-none"
+                    layoutId="small-hat"
+                    className="absolute -top-2 -right-2 rotate-[15deg] w-8 h-8 z-50 pointer-events-none"
                     initial={false}
                     animate={{
-                      y: isAnimating ? [0, -25, 0] : 0, // Subtle arc lift
-                      rotate: 15, // Constant 15-degree clockwise tilt
+                      y: isAnimating ? [0, -10, 0] : 0,
                     }}
                     onAnimationComplete={() => {
                       if (isAnimating) {
                         setIsAnimating(false);
-                        setDisplayIndex(activeIndex); // Update Card when hat lands
+                        setDisplayIndex(activeIndex);
                       }
                     }}
                     transition={glideTransition}
                   >
-                    <Image
+                    <img
                       src="/icon-hat.png"
-                      alt="Rato Hat"
-                      width={50}
-                      height={50}
-                      className="object-contain"
+                      alt="Hat"
+                      className="w-full h-full object-contain"
                     />
                   </motion.div>
                 )}
 
-                {/* Active Frame Highlight (Rato Red #E11D2E) */}
-                {isActive && (
-                  <motion.div
-                    layoutId="active-frame"
-                    className="absolute border-2 border-accent z-10 pointer-events-none"
-                    initial={false}
-                    animate={{
-                      opacity: isAnimating ? 0.2 : 1,
-                    }}
-                    transition={{ duration: 0.2 }}
-                    style={{ width: slotSize, height: slotSize }}
-                  />
-                )}
-
-                {/* Portrait Frame */}
-                <motion.div
-                  className="cursor-pointer bg-white flex items-center justify-center shadow-md overflow-hidden box-border relative z-0"
-                  onClick={() => handlePortraitClick(index)}
-                  animate={{
-                    width: isActive ? slotSize : slotSize * inactiveScale,
-                    height: isActive ? slotSize : slotSize * inactiveScale,
-                  }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                {/* Thumbnail Frame */}
+                <div
+                  className={`relative overflow-hidden w-24 h-32 lg:w-32 lg:h-44 border-2 transition-all duration-500 rounded-xl ${isActive ? "border-accent scale-105 shadow-lg" : "border-transparent opacity-40 hover:opacity-100"
+                    }`}
                 >
-                  <motion.img
+                  <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover object-top pointer-events-none"
-                    animate={{
-                      filter: isActive ? "grayscale(0%)" : "grayscale(100%)",
-                      opacity: isActive ? 1 : 0.8,
-                    }}
-                    transition={{ duration: 0.6 }}
+                    className="w-full h-full object-cover grayscale"
                   />
-                </motion.div>
+                </div>
               </div>
             );
           })}

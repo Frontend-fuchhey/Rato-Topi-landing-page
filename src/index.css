@@ -1,4 +1,8 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&family=Mukta:wght@700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
@@ -7,20 +11,10 @@
   --divider: #ededed;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-divider: var(--divider);
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-jakarta);
-  --font-mukta: var(--font-mukta);
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), sans-serif;
+  font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
 
@@ -28,19 +22,28 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Typography Variables for Tailwind */
+@layer base {
+  .font-sans {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .font-mukta {
+    font-family: 'Mukta', sans-serif;
+  }
+}
+
 /* Glossy Text Animation */
 .glossy-text {
   position: relative;
   display: inline-block;
-  font-family: var(--font-mukta), sans-serif;
+  font-family: 'Mukta', sans-serif;
   font-weight: 800;
-  
-  /* Solid Red Interior with Black Outline */
   color: #e11d2e;
   -webkit-text-stroke: 1.5px #000000;
   paint-order: stroke fill;
-  
-  /* Glossy Sheen Effect */
   background: linear-gradient(
     120deg, 
     transparent 0%, 
@@ -53,8 +56,6 @@ html {
   -webkit-background-clip: text;
   background-clip: text;
   animation: sheen 3s infinite linear;
-  
-  /* Depth Shadow */
   text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
 }
 
@@ -63,7 +64,25 @@ html {
   100% { background-position: 100% 0; }
 }
 
-/* Outline Headers for Nepali Text */
+/* Studio Theme Classes */
+.text-hollow-red {
+  color: transparent !important;
+  -webkit-text-stroke: 2px #e11d2e !important;
+  paint-order: stroke fill;
+}
+
+.underline-red {
+  border-bottom: 5px solid #e11d2e;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.bg-studio-dots {
+  background-image: radial-gradient(#e5e7eb 1.5px, transparent 1.5px);
+  background-size: 40px 40px;
+}
+
+/* Hollow Headers for Nepali Text */
 .outline-header {
   color: transparent !important;
   -webkit-text-stroke: 1.5px #000000;
@@ -71,7 +90,21 @@ html {
   letter-spacing: -0.02em;
 }
 
-/* Custom scrollbar to keep it clean */
+/* Shared colors */
+.text-accent {
+  color: #e11d2e;
+}
+.bg-accent {
+  background-color: #e11d2e;
+}
+.border-accent {
+  border-color: #e11d2e;
+}
+.border-divider {
+  border-color: #ededed;
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }

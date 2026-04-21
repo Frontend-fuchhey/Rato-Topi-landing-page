@@ -83,7 +83,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-[#4A4A4A] text-lg md:text-xl leading-[1.6] max-w-2xl font-sans"
+              className="text-foreground/70 text-lg md:text-xl leading-[1.6] max-w-2xl font-sans"
             >
               Rato Topi is a specialized collective of five engineers. We formed this studio to bridge the gap between high-level architectural logic and human-centric digital experiences. Our name, the &quot;Red Hat&quot;, symbolizes leadership, technical mastery, and our commitment to the Nepalese tech ecosystem.
             </motion.p>
@@ -108,7 +108,7 @@ export default function About() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-40">
           <div className="lg:col-span-4 hidden lg:block" />
-          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-16">
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16">
             {expertise.map((item, idx) => (
               <motion.div
                 key={item.title}
@@ -124,7 +124,7 @@ export default function About() {
                 <h3 className="font-heading font-bold text-xl text-black mb-4 uppercase tracking-wider">
                   {item.title}
                 </h3>
-                <p className="text-[#6B6B6B] leading-[1.6] text-sm md:text-base">
+                <p className="text-foreground/60 leading-[1.6] text-sm md:text-base">
                   {item.description}
                 </p>
               </motion.div>
