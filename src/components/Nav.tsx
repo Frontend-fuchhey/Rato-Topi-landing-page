@@ -1,22 +1,33 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, User, Briefcase, Image as ImageIcon, Mail, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { name: "Home", id: "hero", icon: Home },
-  { name: "About", id: "about", icon: User },
-  { name: "Work", id: "work", icon: Briefcase },
-  { name: "Gallery", id: "gallery", icon: ImageIcon },
-  { name: "Contact", id: "contact", icon: Mail },
+  { name: "Home", id: "hero" },
+  { name: "About", id: "about" },
+  { name: "Services", id: "services" },
+  { name: "Team", id: "team" },
+  { name: "Case Studies", id: "work" },
+  { name: "Contact", id: "contact" },
 ];
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const sections = navItems.map(item => document.getElementById(item.id));
+      let current = "hero";
+      sections.forEach(section => {
+        if (section) {
+          const sectionTop = section.getBoundingClientRect().top;
+          if (sectionTop <= 150) {
+            current = section.id;
+          }
+        }
+      });
+      setActiveSection(current);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -37,42 +48,46 @@ export default function Nav() {
         behavior: 'smooth'
       });
     }
+    setActiveSection(id);
     setMobileMenuOpen(false);
   };
 
   const NavLink = ({ 
     id, 
-    text,
-    Icon
+    text
   }: { 
     id: string; 
     text: string;
-    Icon: any;
-  }) => (
-    <a 
-      href={`#${id}`}
-      onClick={(e) => handleNavClick(e, id)}
-      className="flex flex-row items-center gap-1.5 text-[11px] font-bold text-black hover:text-[#e11d2e] transition uppercase tracking-widest"
-    >
-      <Icon size={12} />
-      <span>{text}</span>
-    </a>
-  );
+  }) => {
+    const isActive = activeSection === id;
+    return (
+      <a 
+        href={`#${id}`}
+        onClick={(e) => handleNavClick(e, id)}
+        className={`relative flex flex-col items-center justify-center text-sm font-bold transition-colors ${isActive ? 'text-accent' : 'text-black hover:text-gray-600'}`}
+      >
+        <span>{text}</span>
+        {/* Active Underline / Dot */}
+        {isActive && (
+          <motion.div 
+            layoutId="nav-indicator"
+            className="absolute -bottom-2 w-full h-[2px] bg-accent"
+          />
+        )}
+      </a>
+    );
+  };
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-12 lg:px-20 py-3 transition-all duration-300 ${
-          scrolled ? "bg-white/90 backdrop-blur-sm border-b border-divider shadow-sm" : "bg-white/80 backdrop-blur-sm"
-        }`}
-      >
+      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 flex justify-between items-center px-12">
         {/* Logo */}
         <div className="flex items-center">
           <a href="#hero" onClick={(e) => handleNavClick(e, 'hero')}>
             <img
               src="/logo.png"
               alt="Rato Topi Logo"
-              className="h-6 w-auto object-contain"
+              className="h-8 w-auto object-contain"
             />
           </a>
         </div>
@@ -80,7 +95,7 @@ export default function Nav() {
         {/* Desktop Nav */}
         <div className="hidden md:flex gap-8 items-center">
           {navItems.map((item) => (
-            <NavLink key={item.id} id={item.id} text={item.name} Icon={item.icon} />
+            <NavLink key={item.id} id={item.id} text={item.name} />
           ))}
         </div>
 
@@ -120,7 +135,7 @@ export default function Nav() {
               
               <div className="flex flex-col gap-6 items-start">
                 {navItems.map((item) => (
-                  <NavLink key={item.id} id={item.id} text={item.name} Icon={item.icon} />
+                  <NavLink key={item.id} id={item.id} text={item.name} />
                 ))}
               </div>
             </motion.div>
