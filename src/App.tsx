@@ -1,24 +1,19 @@
-import { useState } from 'react';
-import Nav from './components/Nav';
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import ServicesGrid from './components/ServicesGrid';
+import Services from './components/Services';
 import About from './components/About';
-import TeamShowcase from './components/TeamShowcase';
-import CaseStudies from './components/CaseStudies';
+import Team from './components/Team';
 import Footer from './components/Footer';
 
 export default function App() {
-  const [activeMemberIndex, setActiveMemberIndex] = useState(0);
-
   return (
     <div className="w-full min-h-screen bg-white text-black font-sans">
-      <Nav />
+      <Navbar />
       <main>
-        <Hero activeIndex={activeMemberIndex} />
-        <ServicesGrid />
+        <Hero />
+        <Services />
         <About />
-        <TeamShowcase activeIndex={activeMemberIndex} setActiveIndex={setActiveMemberIndex} />
-        <CaseStudies />
+        <Team />
       </main>
       <Footer />
     </div>

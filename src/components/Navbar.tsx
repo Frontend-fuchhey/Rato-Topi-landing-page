@@ -1,23 +1,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { content } from "../data/content";
 
-const navItems = [
-  { name: "Home", id: "hero" },
-  { name: "About", id: "about" },
-  { name: "Services", id: "services" },
-  { name: "Team", id: "team" },
-  { name: "Case Studies", id: "work" },
-  { name: "Contact", id: "contact" },
-];
-
-export default function Nav() {
+export default function Navbar() {
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navItems.map(item => document.getElementById(item.id));
+      const sections = content.nav.items.map(item => document.getElementById(item.id));
       let current = "hero";
       sections.forEach(section => {
         if (section) {
@@ -86,7 +78,7 @@ export default function Nav() {
           <a href="#hero" onClick={(e) => handleNavClick(e, 'hero')}>
             <img
               src="/logo.png"
-              alt="Rato Topi Logo"
+              alt={content.nav.logoAlt}
               className="h-8 w-auto object-contain"
             />
           </a>
@@ -94,7 +86,7 @@ export default function Nav() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex gap-8 items-center">
-          {navItems.map((item) => (
+          {content.nav.items.map((item) => (
             <NavLink key={item.id} id={item.id} text={item.name} />
           ))}
         </div>
@@ -127,14 +119,14 @@ export default function Nav() {
               className="fixed top-0 right-0 h-full w-[240px] bg-white z-[70] shadow-2xl p-8 flex flex-col gap-6"
             >
               <div className="flex justify-between items-center">
-                <span className="font-heading font-bold text-accent tracking-tighter text-lg">MENU</span>
+                <span className="font-heading font-bold text-accent tracking-tighter text-lg">{content.nav.menuLabel}</span>
                 <button onClick={() => setMobileMenuOpen(false)} className="text-black">
                   <X size={24} />
                 </button>
               </div>
               
               <div className="flex flex-col gap-6 items-start">
-                {navItems.map((item) => (
+                {content.nav.items.map((item) => (
                   <NavLink key={item.id} id={item.id} text={item.name} />
                 ))}
               </div>
@@ -142,6 +134,8 @@ export default function Nav() {
           </>
         )}
       </AnimatePresence>
+
     </>
   );
 }
+

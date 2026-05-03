@@ -11,19 +11,15 @@
   --divider: #ededed;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-/* Typography Variables for Tailwind */
 @layer base {
+  body {
+    @apply bg-white text-black font-sans overflow-x-hidden;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+
   .font-sans {
     font-family: 'Inter', sans-serif;
   }
@@ -35,28 +31,71 @@ html {
   }
 }
 
-/* Glossy Text Animation */
-.glossy-text {
-  position: relative;
-  display: inline-block;
-  font-family: 'Mukta', sans-serif;
-  font-weight: 800;
-  color: #e11d2e;
-  -webkit-text-stroke: 1.5px #000000;
-  paint-order: stroke fill;
-  background: linear-gradient(
-    120deg, 
-    transparent 0%, 
-    transparent 40%, 
-    rgba(255, 255, 255, 0.8) 50%, 
-    transparent 60%, 
-    transparent 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: sheen 3s infinite linear;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+@layer components {
+  /* Glossy Text Animation */
+  .glossy-text {
+    @apply relative inline-block font-mukta font-extrabold text-accent;
+    -webkit-text-stroke: 1.5px #000000;
+    paint-order: stroke fill;
+    background: linear-gradient(
+      120deg, 
+      transparent 0%, 
+      transparent 40%, 
+      rgba(255, 255, 255, 0.8) 50%, 
+      transparent 60%, 
+      transparent 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: sheen 3s infinite linear;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+  }
+
+  /* Studio Theme Classes */
+  .text-hollow-red {
+    @apply text-transparent;
+    -webkit-text-stroke: 2px #e11d2e !important;
+    paint-order: stroke fill;
+  }
+
+  .underline-red {
+    @apply border-b-[5px] border-accent inline-block pb-[2px];
+  }
+
+  .bg-studio-dots {
+    background-image: radial-gradient(#e5e7eb 1.5px, transparent 1.5px);
+    background-size: 40px 40px;
+  }
+
+  /* Hollow Headers for Nepali Text */
+  .outline-header {
+    @apply text-transparent tracking-tight;
+    -webkit-text-stroke: 1.5px #000000;
+    paint-order: stroke fill;
+  }
+
+  .hollow-text {
+    /* Use the same Mukta font for the Nepali text */
+    font-family: 'Mukta', sans-serif;
+    color: transparent;
+    -webkit-text-stroke: 1.5px black;
+    /* Adjust pixel size for outline boldness */
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-2;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-white;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-divider;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-300;
+  }
 }
 
 @keyframes sheen {
@@ -64,56 +103,3 @@ html {
   100% { background-position: 100% 0; }
 }
 
-/* Studio Theme Classes */
-.text-hollow-red {
-  color: transparent !important;
-  -webkit-text-stroke: 2px #e11d2e !important;
-  paint-order: stroke fill;
-}
-
-.underline-red {
-  border-bottom: 5px solid #e11d2e;
-  display: inline-block;
-  padding-bottom: 2px;
-}
-
-.bg-studio-dots {
-  background-image: radial-gradient(#e5e7eb 1.5px, transparent 1.5px);
-  background-size: 40px 40px;
-}
-
-/* Hollow Headers for Nepali Text */
-.outline-header {
-  color: transparent !important;
-  -webkit-text-stroke: 1.5px #000000;
-  paint-order: stroke fill;
-  letter-spacing: -0.02em;
-}
-
-/* Shared colors */
-.text-accent {
-  color: #e11d2e;
-}
-.bg-accent {
-  background-color: #e11d2e;
-}
-.border-accent {
-  border-color: #e11d2e;
-}
-.border-divider {
-  border-color: #ededed;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background); 
-}
-::-webkit-scrollbar-thumb {
-  background: var(--divider); 
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #d4d4d4; 
-}
