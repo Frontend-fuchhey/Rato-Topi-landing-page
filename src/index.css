@@ -1,105 +1,161 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&family=Mukta:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Raleway:wght@700;800;900&family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&family=Mukta:wght@700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
-  --accent: #e11d2e;
-  --divider: #ededed;
+  --red: #BE1E2D;
+  --red-dark: #9a1724;
+  --charcoal: #1A1A1A;
+  --white: #FFFFFF;
+  --slate: #F4F4F4;
+  --divider: #E8E8E8;
+  --text-muted: #6B7280;
 }
 
 @layer base {
   body {
-    @apply bg-white text-black font-sans overflow-x-hidden;
+    @apply bg-white text-[#1A1A1A] overflow-x-hidden;
+    font-family: 'Inter', 'Poppins', sans-serif;
   }
-  
+
   html {
     @apply scroll-smooth;
   }
 
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', 'Raleway', sans-serif;
+  }
+
   .font-sans {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'Poppins', sans-serif;
   }
+
   .font-heading {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Montserrat', 'Raleway', sans-serif;
   }
+
   .font-mukta {
     font-family: 'Mukta', sans-serif;
   }
 }
 
 @layer components {
-  /* Glossy Text Animation */
-  .glossy-text {
-    @apply relative inline-block font-mukta font-extrabold text-accent;
-    -webkit-text-stroke: 1.5px #000000;
-    paint-order: stroke fill;
-    background: linear-gradient(
-      120deg, 
-      transparent 0%, 
-      transparent 40%, 
-      rgba(255, 255, 255, 0.8) 50%, 
-      transparent 60%, 
-      transparent 100%
-    );
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    animation: sheen 3s infinite linear;
-    text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-  }
+  /* Design System Tokens */
+  .text-brand-red { color: var(--red); }
+  .bg-brand-red { background-color: var(--red); }
+  .border-brand-red { border-color: var(--red); }
 
-  /* Studio Theme Classes */
-  .text-hollow-red {
-    @apply text-transparent;
-    -webkit-text-stroke: 2px #e11d2e !important;
-    paint-order: stroke fill;
-  }
-
-  .underline-red {
-    @apply border-b-[5px] border-accent inline-block pb-[2px];
-  }
-
-  .bg-studio-dots {
-    background-image: radial-gradient(#e5e7eb 1.5px, transparent 1.5px);
-    background-size: 40px 40px;
-  }
-
-  /* Hollow Headers for Nepali Text */
-  .outline-header {
-    @apply text-transparent tracking-tight;
-    -webkit-text-stroke: 1.5px #000000;
-    paint-order: stroke fill;
-  }
-
+  /* Hollow / Outline Text */
   .hollow-text {
-    /* Use the same Mukta font for the Nepali text */
     font-family: 'Mukta', sans-serif;
     color: transparent;
-    -webkit-text-stroke: 1.5px black;
-    /* Adjust pixel size for outline boldness */
+    -webkit-text-stroke: 1.5px #1A1A1A;
+    paint-order: stroke fill;
+  }
+
+  .hollow-text-white {
+    font-family: 'Mukta', sans-serif;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #ffffff;
+    paint-order: stroke fill;
+  }
+
+  /* Dot Grid Background */
+  .bg-studio-dots {
+    background-image: radial-gradient(#d1d5db 1.2px, transparent 1.2px);
+    background-size: 32px 32px;
+  }
+
+  .bg-studio-dots-dark {
+    background-image: radial-gradient(rgba(255,255,255,0.08) 1.2px, transparent 1.2px);
+    background-size: 32px 32px;
+  }
+
+  /* CTA Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 rounded-full font-heading font-bold text-xs tracking-[0.15em] uppercase text-white transition-all duration-300;
+    background-color: var(--red);
+  }
+  .btn-primary:hover {
+    background-color: var(--red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(190, 30, 45, 0.4);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-8 py-4 rounded-full font-heading font-bold text-xs tracking-[0.15em] uppercase border-2 border-[#1A1A1A] text-[#1A1A1A] bg-transparent transition-all duration-300;
+  }
+  .btn-outline:hover {
+    @apply bg-[#1A1A1A] text-white;
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-white {
+    @apply inline-flex items-center justify-center px-8 py-4 rounded-full font-heading font-bold text-xs tracking-[0.15em] uppercase border-2 border-white text-white bg-transparent transition-all duration-300;
+  }
+  .btn-outline-white:hover {
+    @apply bg-white;
+    color: var(--red);
+    transform: translateY(-2px);
+  }
+
+  /* Section Label */
+  .section-label {
+    @apply inline-flex items-center gap-2 text-xs font-heading font-bold tracking-[0.2em] uppercase mb-4;
+    color: var(--red);
+  }
+  .section-label::before {
+    content: '';
+    @apply block w-6 h-[2px];
+    background-color: var(--red);
+  }
+
+  /* Service Cards */
+  .service-card {
+    @apply relative bg-white rounded-2xl p-8 border border-[#E8E8E8] flex flex-col items-start overflow-hidden cursor-pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  }
+  .service-card:hover .service-icon {
+    color: var(--red);
+  }
+
+  /* Portfolio Cards */
+  .portfolio-card {
+    @apply relative bg-white rounded-2xl overflow-hidden border border-[#E8E8E8] cursor-pointer group;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  }
+
+  /* Glassmorphic Nav */
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
   }
 
   /* Custom Scrollbar */
-  .custom-scrollbar::-webkit-scrollbar {
-    @apply w-2;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-white;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-divider;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-300;
-  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f4f4f4; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #be1e2d; }
 }
 
-@keyframes sheen {
-  0% { background-position: -100% 0; }
-  100% { background-position: 100% 0; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
